@@ -47,31 +47,35 @@
     </div>
     <div class="container">
       <div class="card card-cadastro">
-        <h2>Bem-vindo!</h2>
+        <h2>Bem-vindo! Cadastre seu livro!!!</h2>
         <div class="formulario">
           <!--
                          Para inserir mais um campo, copie uma das inputs abaixo.
                          Assim que inserir vá para o script abaixo.
                      -->
           <div class="campo">
-            <span>Código de ativação:</span>
-            <input id="codigo_input" type="text" placeholder="Insira aqui seu código" />
+            <span>Título do livro:</span>
+            <input id="titulo_input" type="text" placeholder="Insira aqui o título do livro" />
           </div>
           <div class="campo">
-            <span>Nome:</span>
-            <input id="nome_input" type="text" placeholder="Seu nome" />
+            <span>Autor:</span>
+            <input id="autor_input" type="text" placeholder="Nome do autor" />
           </div>
           <div class="campo">
-            <span>E-mail:</span>
-            <input id="email_input" type="text" placeholder="meuemail@provedor.com" />
+            <span>Preço de compra:</span>
+            <input id="precoCompra_input" type="number" placeholder="Insira o preço de compra do livro" />
           </div>
           <div class="campo">
-            <span>Senha:</span>
-            <input id="senha_input" type="password" placeholder="******" />
+            <span>Preço de venda:</span>
+            <input id="precoVenda_input" type="number" placeholder="Insira o preço de venda do livro" />
           </div>
           <div class="campo">
-            <span>Confirmação da Senha:</span>
-            <input id="confirmacao_senha_input" type="password" placeholder="******" />
+            <span>Quantidade em estoque:</span>
+            <input id="qntEstoque_input" type="number" placeholder="Insira a quantidade de livros em estoque" />
+          </div>
+          <div class="campo">
+            <span>Gênero:</span>
+            <input id="genero_input" type="password" placeholder="Gênero do livro" />
           </div>
           <button class="botao" onclick="cadastrar()">Cadastrar</button>
         </div>
@@ -106,20 +110,20 @@
 
     //Recupere o valor da nova input pelo nome do id
     // Agora vá para o método fetch logo abaixo
-    var nomeVar = nome_input.value;
-    var emailVar = email_input.value;
-    var senhaVar = senha_input.value;
-    var confirmacaoSenhaVar = confirmacao_senha_input.value;
-    var codigoVar = codigo_input.value;
-    var idEmpresaVincular
+    var tituloVar = titulo_input.value
+    var autorVar = autor_input.value;
+    var precoCompraVar = precoCompra_input.value;
+    var precoVendaVar = precoVenda_input.value;
+    var qntEstoqueVar = qntEstoque_input.value;
+    var generoVar = genero_input.value;
 
     // Verificando se há algum campo em branco
     if (
-      nomeVar == "" ||
-      emailVar == "" ||
-      senhaVar == "" ||
-      confirmacaoSenhaVar == "" ||
-      codigoVar == ""
+      (autorVar == "" ||
+      precoCompraVar == "" ||
+      precoVendaVar == "" ||
+      qntEstoqueVar == "" ||
+      generoVar == ""|| tituloVar=="")
     ) {
       cardErro.style.display = "block";
       mensagem_erro.innerHTML =
@@ -128,21 +132,26 @@
       finalizarAguardar();
       return false;
     } else {
-      setInterval(sumirMensagem, 5000);
-    }
+    setInterval(sumirMensagem, 5000);
+  }
+    // } else if ((senhaVar.includes('1') || senhaVar.includes('2') || senhaVar.includes('3') || senhaVar.includes('4') || senhaVar.includes('5') ||
+    //         senhaVar.includes('6') || senhaVar.includes('7') || senhaVar.includes('8') || senhaVar.includes('9') || senhaVar.includes('0')) &&
+    //         (senhaVar.includes('!') || senhaVar.includes('@') || senhaVar.includes('#') || senhaVar.includes('$') || senhaVar.includes('%') ||
+    //             senhaVar.includes('¨') || senhaVar.includes('&') || senhaVar.includes('*')) && (senhaVar.length >= 6)) {
+    //         txt.innerHTML = `<span style="color: darkgreen;">Senha forte</span>`
 
     // Verificando se o código de ativação é de alguma empresa cadastrada
-    for (let i = 0; i < listaEmpresasCadastradas.length; i++) {
-      if (listaEmpresasCadastradas[i].codigo_ativacao == codigoVar) {
-        idEmpresaVincular = listaEmpresasCadastradas[i].id
-        console.log("Código de ativação válido.");
-        break;
-      } else {
-        cardErro.style.display = "block";
-        mensagem_erro.innerHTML = "(Mensagem de erro para código inválido)";
-        finalizarAguardar();
-      }
-    }
+    // for (let i = 0; i < listaEmpresasCadastradas.length; i++) {
+    //   if (listaEmpresasCadastradas[i].codigo_ativacao == generoVar) {
+    //     idEmpresaVincular = listaEmpresasCadastradas[i].id
+    //     console.log("Código de ativação válido.");
+    //     break;
+    //   } else {
+    //     cardErro.style.display = "block";
+    //     mensagem_erro.innerHTML = "(Mensagem de erro para código inválido)";
+    //     finalizarAguardar();
+    //   }
+    // }
 
     // Enviando o valor da nova input
     fetch("/usuarios/cadastrar", {
@@ -153,10 +162,12 @@
       body: JSON.stringify({
         // crie um atributo que recebe o valor recuperado aqui
         // Agora vá para o arquivo routes/usuario.js
-        nomeServer: nomeVar,
-        emailServer: emailVar,
-        senhaServer: senhaVar,
-        idEmpresaVincularServer: idEmpresaVincular
+        tituloServer: tituloVar,
+        autorServer: autorVar,
+        precoCompraServer: precoCompraVar,
+        precoVendaServer: precoVendaVar,
+        qntEstoqueServer: qntEstoqueVar,
+        generoServer: generoVar
       }),
     })
       .then(function (resposta) {
@@ -187,24 +198,24 @@
   }
 
   // Listando empresas cadastradas 
-  function listar() {
-    fetch("/empresas/listar", {
-      method: "GET",
-    })
-      .then(function (resposta) {
-        resposta.json().then((empresas) => {
-          empresas.forEach((empresa) => {
-            listaEmpresasCadastradas.push(empresa);
+  // function listar() {
+  //   fetch("/empresas/listar", {
+  //     method: "GET",
+  //   })
+  //     .then(function (resposta) {
+  //       resposta.json().then((empresas) => {
+  //         empresas.forEach((empresa) => {
+  //           listaEmpresasCadastradas.push(empresa);
 
-            console.log("listaEmpresasCadastradas")
-            console.log(listaEmpresasCadastradas[0].codigo_ativacao)
-          });
-        });
-      })
-      .catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`);
-      });
-  }
+  //           console.log("listaEmpresasCadastradas")
+  //           console.log(listaEmpresasCadastradas[0].codigo_ativacao)
+  //         });
+  //       });
+  //     })
+  //     .catch(function (resposta) {
+  //       console.log(`#ERRO: ${resposta}`);
+  //     });
+  // }
 
   function sumirMensagem() {
     cardErro.style.display = "none";

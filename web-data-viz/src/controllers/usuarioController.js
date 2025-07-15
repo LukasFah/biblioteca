@@ -53,24 +53,30 @@ function autenticar(req, res) {
 
 function cadastrar(req, res) {
     // Crie uma variável que vá recuperar os valores do arquivo cadastro.html
-    var nome = req.body.nomeServer;
-    var email = req.body.emailServer;
-    var senha = req.body.senhaServer;
-    var fkEmpresa = req.body.idEmpresaVincularServer;
+    var titulo = req.body.tituloServer;
+    var autor = req.body.autorServer;
+    var precoCompra = req.body.precoCompraServer;
+    var precoVenda = req.body.precoVendaServer;
+    var qntEstoque = req.body.qntEstoqueServer;
+    var fkGenero = req.body.generoServer;
 
     // Faça as validações dos valores
-    if (nome == undefined) {
-        res.status(400).send("Seu nome está undefined!");
-    } else if (email == undefined) {
-        res.status(400).send("Seu email está undefined!");
-    } else if (senha == undefined) {
-        res.status(400).send("Sua senha está undefined!");
-    } else if (fkEmpresa == undefined) {
-        res.status(400).send("Sua empresa a vincular está undefined!");
+    if (titulo == undefined) {
+        res.status(400).send("Seu titulo está undefined!");
+    } else if (autor == undefined) {
+        res.status(400).send("Seu autor está undefined!");
+    } else if (precoCompra == undefined) {
+        res.status(400).send("Sua preco de compra está undefined!");
+    } else if (precoVenda == undefined) {
+        res.status(400).send("Seu preço de venda está undefined!");
+    }else if (qntEstoque == undefined) {
+        res.status(400).send("Sua quantidade de estoque está undefined!");
+    } else if (fkGenero == undefined) {
+        res.status(400).send("Sua fkGenero está undefined!");
     } else {
 
         // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
-        usuarioModel.cadastrar(nome, email, senha, fkEmpresa)
+        usuarioModel.cadastrar(titulo,autor, precoCompra, precoVenda, qntEstoque, fkGenero)
             .then(
                 function (resultado) {
                     res.json(resultado);

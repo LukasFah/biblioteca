@@ -9,13 +9,14 @@
   <title>AquaTech | Cadastro</title>
 
   <script src="./js/sessao.js"></script>
+  <script src="./js/livros.js"></script>
 
   <link rel="stylesheet" href="./css/estilo.css" />
   <link rel="icon" href="./assets/icon/favicon2.ico" />
   <link rel="preconnect" href="https://fonts.gstatic.com" />
 </head>
 
-<body onload="listar()">
+<body> 
   <!--header inicio-->
   <div class="header">
     <div class="container">
@@ -75,7 +76,12 @@
           </div>
           <div class="campo">
             <span>Gênero:</span>
-            <input id="genero_input" type="password" placeholder="Gênero do livro" />
+            <select id="genero_input">
+              <option value="1">Horror</option>
+              <option value="2">Romance</option>
+              <option value="3">Poesia</option>
+              <option value="4">Fantasia</option>
+            </select>
           </div>
           <button class="botao" onclick="cadastrar()">Cadastrar</button>
         </div>
@@ -102,28 +108,38 @@
 
 <script>
 
-  // Array para armazenar empresas cadastradas para validação de código de ativação 
-  let listaEmpresasCadastradas = [];
-
   function cadastrar() {
     // aguardar();
 
     //Recupere o valor da nova input pelo nome do id
     // Agora vá para o método fetch logo abaixo
-    var tituloVar = titulo_input.value
+    var tituloVar = titulo_input.value;
     var autorVar = autor_input.value;
     var precoCompraVar = precoCompra_input.value;
     var precoVendaVar = precoVenda_input.value;
     var qntEstoqueVar = qntEstoque_input.value;
     var generoVar = genero_input.value;
+    var ok = true;
+    var vt_caracter = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+      '!', '@', '#', '$', '%', '&', '*', '(', ')', '-', '+', '.', ',', '?'];
 
+    var ok = true;
+
+    for (var i = 0; i < autorVar.length; i++) {
+      var letra = autorVar[i];
+
+      if (vt_caracter.includes(letra)) {
+        ok = false;
+        break;
+      }
+    }
     // Verificando se há algum campo em branco
     if (
       (autorVar == "" ||
-      precoCompraVar == "" ||
-      precoVendaVar == "" ||
-      qntEstoqueVar == "" ||
-      generoVar == ""|| tituloVar=="")
+        precoCompraVar == "" ||
+        precoVendaVar == "" ||
+        qntEstoqueVar == "" ||
+        generoVar == "" || tituloVar == "")
     ) {
       cardErro.style.display = "block";
       mensagem_erro.innerHTML =
@@ -131,27 +147,24 @@
 
       finalizarAguardar();
       return false;
+    } else if (ok == false) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML =
+        "(Mensagem de erro para campo autor possui carater númerico ou especial!!!)";
+      finalizarAguardar();
+      return false;
     } else {
-    setInterval(sumirMensagem, 5000);
-  }
-    // } else if ((senhaVar.includes('1') || senhaVar.includes('2') || senhaVar.includes('3') || senhaVar.includes('4') || senhaVar.includes('5') ||
-    //         senhaVar.includes('6') || senhaVar.includes('7') || senhaVar.includes('8') || senhaVar.includes('9') || senhaVar.includes('0')) &&
-    //         (senhaVar.includes('!') || senhaVar.includes('@') || senhaVar.includes('#') || senhaVar.includes('$') || senhaVar.includes('%') ||
-    //             senhaVar.includes('¨') || senhaVar.includes('&') || senhaVar.includes('*')) && (senhaVar.length >= 6)) {
-    //         txt.innerHTML = `<span style="color: darkgreen;">Senha forte</span>`
 
-    // Verificando se o código de ativação é de alguma empresa cadastrada
-    // for (let i = 0; i < listaEmpresasCadastradas.length; i++) {
-    //   if (listaEmpresasCadastradas[i].codigo_ativacao == generoVar) {
-    //     idEmpresaVincular = listaEmpresasCadastradas[i].id
-    //     console.log("Código de ativação válido.");
-    //     break;
-    //   } else {
-    //     cardErro.style.display = "block";
-    //     mensagem_erro.innerHTML = "(Mensagem de erro para código inválido)";
-    //     finalizarAguardar();
-    //   }
-    // }
+      if (precoCompraVar >= 100 && (generoVar == '1' || generoVar == '2')) {
+        precoVendaVar = precoCompraVar *1.225
+      } else if ((precoCompraVar > 0 && precoCompraVar <= 50) && (generoVar == '3' || generoVar == '1')) {
+        precoVendaVar = precoCompraVar * 1.25
+      }else if ((precoCompraVar > 50 && precoCompraVar < 100) && generoVar == '4') {
+        precoVendaVar = precoCompraVar * 1.275
+      }
+
+      setInterval(sumirMensagem, 5000);
+    }
 
     // Enviando o valor da nova input
     fetch("/usuarios/cadastrar", {
@@ -180,7 +193,7 @@
             "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
 
           setTimeout(() => {
-            window.location = "login.html";
+            window.location = "livros.html";
           }, "2000");
 
           limparFormulario();
@@ -197,25 +210,6 @@
     return false;
   }
 
-  // Listando empresas cadastradas 
-  // function listar() {
-  //   fetch("/empresas/listar", {
-  //     method: "GET",
-  //   })
-  //     .then(function (resposta) {
-  //       resposta.json().then((empresas) => {
-  //         empresas.forEach((empresa) => {
-  //           listaEmpresasCadastradas.push(empresa);
-
-  //           console.log("listaEmpresasCadastradas")
-  //           console.log(listaEmpresasCadastradas[0].codigo_ativacao)
-  //         });
-  //       });
-  //     })
-  //     .catch(function (resposta) {
-  //       console.log(`#ERRO: ${resposta}`);
-  //     });
-  // }
 
   function sumirMensagem() {
     cardErro.style.display = "none";

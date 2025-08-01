@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" />
 </head>
 
-<body> 
+<body>
   <!--header inicio-->
   <div class="header">
     <div class="container">
@@ -109,6 +109,15 @@
 <script>
 
   function cadastrar() {
+    var titulo = sessionStorage.EMAIL_USUARIO;
+
+
+    // tituloServer: tituloVar,
+    // autorServer: autorVar,
+    // precoCompraServer: precoCompraVar,
+    // precoVendaServer: precoVendaVar,
+    // qntEstoqueServer: qntEstoqueVar,
+    // generoServer: generoVar
     // aguardar();
 
     //Recupere o valor da nova input pelo nome do id
@@ -157,15 +166,22 @@
       setInterval(sumirMensagem, 5000);
     }
 
+    localStorage.setItem("titulo", tituloVar);
+    localStorage.setItem("autor", autorVar);
+    localStorage.setItem("precoCompra", precoCompraVar);
+    localStorage.setItem("precoVenda", precoVendaVar);
+    localStorage.setItem("qntEstoque", qntEstoqueVar);
+    localStorage.setItem("genero", generoVar);
+
 
     if (precoCompraVar >= 100 && (generoVar == '1' || generoVar == '2')) {
-        precoVendaVar = precoCompraVar *1.225
-      } else if ((precoCompraVar > 0 && precoCompraVar <= 50) && (generoVar == '3' || generoVar == '1')) {
-        precoVendaVar = precoCompraVar * 1.25
-      }else if ((precoCompraVar > 50 && precoCompraVar < 100) && generoVar == '4') {
-        precoVendaVar = precoCompraVar * 1.275
-      }
-      
+      precoVendaVar = precoCompraVar * 1.225
+    } else if ((precoCompraVar > 0 && precoCompraVar <= 50) && (generoVar == '3' || generoVar == '1')) {
+      precoVendaVar = precoCompraVar * 1.25
+    } else if ((precoCompraVar > 50 && precoCompraVar < 100) && generoVar == '4') {
+      precoVendaVar = precoCompraVar * 1.275
+    }
+
     // Enviando o valor da nova input
     fetch("/usuarios/cadastrar", {
       method: "POST",

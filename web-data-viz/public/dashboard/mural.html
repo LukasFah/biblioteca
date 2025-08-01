@@ -99,8 +99,12 @@
 </html>
 
 <script>
-    
-    b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+    var titulo = localStorage.getItem("titulo");
+    var autor = localStorage.getItem("autor");
+    var precoCompra = localStorage.getItem("precoCompra");
+    var precoVenda = localStorage.getItem("precoVenda");
+    var qntEstoque = localStorage.getItem("qntEstoque");
+    var genero = localStorage.getItem("genero");
 
     function limparFormulario() {
         document.getElementById("form_postagem").reset();
@@ -194,26 +198,32 @@
 
                         // criando e manipulando elementos do HTML via JavaScript
                         var divPublicacao = document.createElement("div");
-                        var spanID = document.createElement("span");
                         var spanTitulo = document.createElement("span");
-                        var spanNome = document.createElement("span");
+                        var spanAutor = document.createElement("span");
+                        var spanCompra = document.createElement("span");
+                        var spanVenda = document.createElement("span");
+                        var spanEstoque = document.createElement("span");
+                        var spanGenero= document.createElement("span");
                         var divDescricao = document.createElement("div");
                         var divButtons = document.createElement("div");
                         var btnEditar = document.createElement("button");
                         var btnDeletar = document.createElement("button");
 
 
-                        spanID.innerHTML = "ID: <b>" + publicacao.idAviso + "</b>";
-                        spanTitulo.innerHTML = "Título: <b>" + publicacao.titulo + "</b>";
-                        spanNome.innerHTML = "Autor: <b>" + publicacao.nome + "</b>";
-                        divDescricao.innerHTML = "Descrição: <b>" + publicacao.descricao + "</b>";
+                        spanTitulo.innerHTML = "Título: <b>" + publicacao.Titulo + "</b>";
+                        spanAutor.innerHTML = "Autor: <b>" + publicacao.Autor + "</b>";
+                        spanCompra.innerHTML = "Valor de compra: <b>" + publicacao.PrecoCompra + "</b>";
+                        spanVenda.innerHTML = "Valor de venda: <b>" + publicacao.PrecoVenda + "</b>";
+                        spanEstoque.innerHTML = "Quantidade em estoque: <b>" + publicacao.Estoque + "</b>";
+                        spanGenero.innerHTML = "Gênero: <b>" + publicacao.Genero + "</b>";
                         btnEditar.innerHTML = "Editar";
                         btnDeletar.innerHTML = "Deletar";
 
                         divPublicacao.className = "publicacao";
-                        spanTitulo.id = "inputNumero" + publicacao.idAviso;
-                        spanNome.className = "publicacao-nome";
-                        spanTitulo.className = "publicacao-titulo";
+                        //  spanTitulo.id = "inputNumero" + publicacao.idAviso;
+                         spanTitulo.className = "publicacao-titulo";
+                         spanAutor.className = "publicacao-autor";
+                         spanGenero.className = "publicacao-genero";
                         divDescricao.className = "publicacao-descricao";
 
                         divButtons.className = "div-buttons"
@@ -226,9 +236,12 @@
                         btnDeletar.id = "btnDeletar" + publicacao.idAviso;
                         btnDeletar.setAttribute("onclick", `deletar(${publicacao.idAviso})`);
 
-                        divPublicacao.appendChild(spanID);
-                        divPublicacao.appendChild(spanNome);
                         divPublicacao.appendChild(spanTitulo);
+                        divPublicacao.appendChild(spanAutor);
+                        divPublicacao.appendChild(spanCompra);
+                        divPublicacao.appendChild(spanVenda);
+                        divPublicacao.appendChild(spanEstoque);
+                        divPublicacao.appendChild(spanGenero);
                         divPublicacao.appendChild(divDescricao);
                         divPublicacao.appendChild(divButtons);
                         divButtons.appendChild(btnEditar);
@@ -247,64 +260,4 @@
         });
     }
 
-
-
-// function cadastrarLivro() {
-//   // Evita o envio padrão do formulário
-//   event.preventDefault();
-
-//   // Captura valores do formulário
-//   var titulo = document.getElementById("titulo").value.trim();
-//   var autor = document.getElementById("autor").value.trim();
-//   var precoCompra = parseFloat(document.getElementById("precoCompra").value);
-//   var precoVenda = parseFloat(document.getElementById("precoVenda").value);
-//   var qntEstoque = parseInt(document.getElementById("qntEstoque").value);
-//   var genero = document.getElementById("genero").value;
-
-//   // Validação simples
-//   if (!titulo || !autor || isNaN(precoCompra) || isNaN(precoVenda) || isNaN(qntEstoque) || !genero) {
-//     alert("Por favor, preencha todos os campos corretamente.");
-//     return false;
-//   }
-
-//   // Exemplo de validação: autor não pode ter números ou caracteres especiais
-//   var vt_caracter = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-//     '!', '@', '#', '$', '%', '&', '*', '(', ')', '-', '+', '.', ',', '?'];
-//   for (var i = 0; i < autor.length; i++) {
-//     if (vt_caracter.includes(autor[i])) {
-//       alert("O campo Autor não pode conter números ou caracteres especiais.");
-//       return false;
-//     }
-//   }
-
-//   // Monta o corpo da requisição
-//   var corpo = {
-//     tituloServer: titulo,
-//     autorServer: autor,
-//     precoCompraServer: precoCompra,
-//     precoVendaServer: precoVenda,
-//     qntEstoqueServer: qntEstoque,
-//     generoServer: genero
-//   };
-
-//   fetch("/livros/cadastrar", { // Atenção: esta rota deve existir no backend
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json"
-//     },
-//     body: JSON.stringify(corpo)
-//   }).then(function (resposta) {
-//     if (resposta.ok) {
-//       alert("Livro cadastrado com sucesso!");
-//       document.getElementById("form_cadastro_livro").reset();
-//     } else {
-//       alert("Erro ao cadastrar livro. Código: " + resposta.status);
-//     }
-//   }).catch(function (erro) {
-//     console.error("Erro na requisição:", erro);
-//     alert("Erro ao cadastrar livro!");
-//   });
-
-//   return false;
-// }
 </script>
